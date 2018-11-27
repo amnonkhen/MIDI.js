@@ -23,7 +23,7 @@
 	window.onload = function () {
 		let getLoop = function () {
 			var loop = {
-				bpm: 120,
+				bpm: 60,
 				notes_per_measure: 16,
 				parts: [
 					{
@@ -49,30 +49,33 @@
 		let playBar = function (bar) {
 			var loop = getLoop();
 			var parts = loop.parts;
-
+			var instrument_numbers = {
+				"acoustic_grand_piano":0,
+                "synth_drum":118,
+			};
 			console.log(`playing bar ${bar}`)
+            let bar_duration_sec = (loop.notes_per_measure / 4) * (60 / loop.bpm);
 			for (var part = 0; part < parts.length; part++) {
+				MIDI.programChange(part, instrument_numbers[parts[part].instrument]);
 				for (var i = 0; i < parts[part].notes.length; i++) {
-					MIDI.chordOn(parts[part].channel,
+					let bar_time = bar + (i)/loop.notes_per_measure;
+					console.log(`bar_time: ${bar_time}`)
+					MIDI.chordOn(part,
 						[parts[part].notes[i]],
 						parts[part].velocity,
-
-						((bar * parts[part].notes.length) + i) * (4 / loop.notes_per_measure) * (60 / loop.bpm));
+                        (bar_time) * bar_duration_sec);
 				}
 			}
+			setTimeout(()=>playBar(bar+1), 1000*bar_duration_sec)
 		};
 		let startPlaying = function () {
 			// debugger;
-			MIDI.programChange(0, 0);
-			MIDI.programChange(1, 118);
-
 			let loop = getLoop();
 			let bar = 0;
-			let bar_duration = 1000 * (loop.notes_per_measure / 4) * (60 / loop.bpm);
-			setInterval(() => {
-				playBar(bar)
-				bar++;
-			}, bar_duration);
+			let bar_duration_ms = 1000
+                * (loop.notes_per_measure / 4)
+                * (60 / loop.bpm);
+			setTimeout(() => playBar(bar), bar_duration_ms);
 		};
 		MIDI.loadPlugin({
 			soundfontUrl: "./soundfont/",
