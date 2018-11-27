@@ -54,16 +54,22 @@
                 "synth_drum":118,
 			};
 			console.log(`playing bar ${bar}`)
-            let bar_duration_sec = (loop.notes_per_measure / 4) * (60 / loop.bpm);
-			for (var part = 0; part < parts.length; part++) {
+			let bar_duration_sec = (loop.notes_per_measure / 4) * (60 / loop.bpm);
+			let C4 = MIDI.keyToNote['C4'];
+			console.log(` bar: ${bar}`);
+			for (var part = 0; part < parts.length-1; part++) {
 				MIDI.programChange(part, instrument_numbers[parts[part].instrument]);
+				console.log(` playing ${MIDI.noteToKey[C4+bar]}`)
 				for (var i = 0; i < parts[part].notes.length; i++) {
-					let bar_time = bar + (i)/loop.notes_per_measure;
-					console.log(`bar_time: ${bar_time}`)
+					let bar_fraction = i/loop.notes_per_measure;
+					let bar_time = bar + bar_fraction;
+					// console.log(` bar_time: ${bar_time}`)
 					MIDI.chordOn(part,
-						[parts[part].notes[i]],
+						// [parts[part].notes[i]],
+						[C4+bar],
 						parts[part].velocity,
-                        (bar_time) * bar_duration_sec);
+                        (bar_time) * bar_duration_sec,
+                    );
 				}
 			}
 			setTimeout(()=>playBar(bar+1), 1000*bar_duration_sec)
