@@ -61,7 +61,7 @@
 				notes_per_measure: 16,
 				parts: [
 					{
-						instrument: 'piano',
+						instrument: 'rock_organ',
 						notes: [85, null, 2, 68,
 							8, 66, 6, 75,
 							10, null, null, 3,
@@ -85,6 +85,7 @@
 						velocity: 127,
 					},]
 			};
+			// return globalLoop;
 			return dummy_loop;
 		};
 
@@ -241,12 +242,8 @@
 			return instrument_numbers[instrument_name] || family_numbers[instrument_name];
 		};
 		let playBar = function (bar) {
-			// var loop = globalLoop;
 			var loop = getLoop();
 			var parts = loop.parts;
-
-			console.log(family_numbers);
-			console.log(`playing bar ${bar}`)
 			let bar_duration_sec = (loop.notes_per_measure / 4) * (60 / loop.bpm);
 			for (var part = 0; part < parts.length; part++) {
 				let instrumentNumber = getInstrumentNumberByName(parts[part].instrument);
@@ -262,7 +259,6 @@
 					}
 				}
 			}
-			setTimeout(() => playBar(bar + 1), 1000 * bar_duration_sec)
 		};
 		let startPlaying = function () {
 			console.log('start playing');
@@ -272,13 +268,14 @@
 			let bar_duration_ms = 1000
 				* (loop.notes_per_measure / 4)
 				* (60 / loop.bpm);
-			setTimeout(() => playBar(bar), bar_duration_ms);
+			setInterval(() => playBar(bar), bar_duration_ms);
 		};
 		MIDI.loadPlugin({
-			soundfontUrl: "./soundfont/",
+			soundfontUrl: "http://gleitz.github.io/midi-js-soundfonts/FluidR3_GM/",
+			// soundfontUrl: "./soundfont/",
 			instruments: [
-				"acoustic_grand_piano",
-                // "acoustic_guitar_steel",
+				"rock_organ",
+                "acoustic_guitar_steel",
                 "synth_drum",
             ],
 			onprogress: function (state, progress) {
