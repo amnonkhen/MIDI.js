@@ -19,8 +19,35 @@
 </head>
 <body>
 <script type="text/javascript">
-
+        globalLoop = null;
 	window.onload = function () {
+		
+		let  getPartFromServer = function() {
+		    const url = 'http://ec2-18-191-23-1.us-east-2.compute.amazonaws.com:5000/part';
+		    const Http = new XMLHttpRequest();
+		    Http.open("GET", url);
+		    Http.send();
+		    Http.onreadystatechange=(e)=>{
+			//console.log(Http.responseText)
+			convertPartToLoop(Http.responseText)
+			setTimeout(getPartFromServer(),1000);
+		    }
+		}
+
+		let convertPartToLoop = function(part) {
+		    if (part && part !== '') {
+			var loop = {
+			    bpm: 120,
+			    notes_per_measure: 16,
+			    parts: []
+			}
+			var obj = JSON.parse(part);
+			Object.keys(obj).map(x => loop.parts.push(obj[x]))
+			console.log(loop)
+			globalLoop = loop;
+		    }
+		}
+	
 		let getLoop = function () {
 			var loop = {
 				bpm: 60,
