@@ -20,18 +20,22 @@
 <body>
 <script type="text/javascript">
 	globalLoop = null;
+	onlyOnce = false;
 	window.onload = function () {
 
 		let getPartsFromServer = function () {
+
 			const url = 'http://ec2-18-191-23-1.us-east-2.compute.amazonaws.com:5000/part';
 			const Http = new XMLHttpRequest();
 			Http.open("GET", url);
 			Http.send();
-			Http.onreadystatechange = (e) => {
-				//console.log(Http.responseText)
-				convertPartsToLoop(Http.responseText)
-				setTimeout(getPartsFromServer(), 1000);
-			}
+             Http.onreadystatechange = (e) => {
+                console.log('a' + Http.responseText)
+                console.log('a' + Http.responseText)
+                convertPartsToLoop(Http.responseText)
+
+             }
+
 		}
 
 		let convertPartsToLoop = function (parts) {
@@ -50,7 +54,7 @@
 						part.velocity = 127;
 						return loop.parts.push(part);
 					})
-				// console.log(loop)
+				 console.log('a' + loop)
 				globalLoop = loop;
 			}
 		}
@@ -85,7 +89,9 @@
 						velocity: 127,
 					},]
 			};
-			// return globalLoop;
+			console.log('global ' + globalLoop);
+			if (globalLoop != null)
+			    return globalLoop;
 			return dummy_loop;
 		};
 
@@ -229,7 +235,7 @@
 		};
 		let family_numbers = {
 				'drums': 118,
-				'piano': 0,
+				'piano': 1,
 				'guitar': 25
 			}
 		;
@@ -269,6 +275,7 @@
 				* (loop.notes_per_measure / 4)
 				* (60 / loop.bpm);
 			setInterval(() => playBar(bar), bar_duration_ms);
+            setInterval(() => getPartsFromServer(), bar_duration_ms / 2);
 		};
 		MIDI.loadPlugin({
 			soundfontUrl: "http://gleitz.github.io/midi-js-soundfonts/FluidR3_GM/",
@@ -282,6 +289,7 @@
 				console.log(state, progress);
 			},
 			onsuccess: function () {
+			    console.log('c')
 				getPartsFromServer();
 				startPlaying();
 			}
