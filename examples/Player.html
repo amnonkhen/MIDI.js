@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+    <input type="text" id="instrument" value="synth_drum">
+
+
+        <script type="text/javascript">
+            $( document ).ready(function() {
+                let play = function () {
+                    var part = {};
+                    part.instrument = $('#instrument').val();
+                    part.notes = [];
+                    part.notes.push(getNum($('#note1').val()));
+                    part.notes.push(getNum($('#note2').val()));
+                    part.notes.push(getNum($('#note3').val()));
+                    part.notes.push(getNum($('#note4').val()));
+                    part.notes.push(getNum($('#note5').val()));
+                    part.notes.push(getNum($('#note6').val()));
+                    part.notes.push(getNum($('#note7').val()));
+                    part.notes.push(getNum($('#note8').val()));
+                    part.notes.push(getNum($('#note9').val()));
+                    part.notes.push(getNum($('#note10').val()));
+                    part.notes.push(getNum($('#note11').val()));
+                    part.notes.push(getNum($('#note12').val()));
+                    part.notes.push(getNum($('#note13').val()));
+                    part.notes.push(getNum($('#note14').val()));
+                    part.notes.push(getNum($('#note15').val()));
+                    part.notes.push(getNum($('#note16').val()));
+                    part.notes_per_measure = 16;
+                    console.log(part);
+                    const url = 'http://ec2-18-191-23-1.us-east-2.compute.amazonaws.com:5000/part/10';
+                    $.post(url,part,function(data,status) {});
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", url, true);
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    xhr.send(JSON.stringify({
+                            'instrument': part.instrument,
+                            'notes': part.notes
+                           // 'notes_per_measure': 16
+                    }));
+                }
+                let getNum = function (str) {
+                    if (!str || str === ""){
+                        return null;
+                    }
+                    return parseInt(str,10);
+                }
+                $("input").change(function(){
+                    play();
+                });
+                play();
+            });
+
+
+        </script>
+    <table>
+        <tr>
+            <td>
+                <input  type="text" id="note1">
+                <div class="slidecontainer">
+                    <input type="range" min="20" max="70" value="20" class="slider" id="myRange">
+                </div>
+            </td>
+            <td>
+                <input type="text" id="note2">
+                <div class="slidecontainer">
+                    <input type="range" min="20" max="70" value="20" class="slider" id="myRange">
+                </div>
+            </td>
+            <td>
+                <input type="text" id="note3">
+                <div class="slidecontainer">
+                    <input type="range" min="20" max="70" value="20" class="slider" id="myRange">
+                </div>
+            </td>
+            <td>
+                <input type="text" id="note4">
+                <div class="slidecontainer">
+                    <input type="range" min="20" max="70" value="20" class="slider" id="myRange">
+                </div>
+            </td>
+            <td>
+                <input type="text" id="note5">
+                <div class="slidecontainer">
+                    <input type="range" min="20" max="70" value="20" class="slider" id="myRange">
+                </div>
+            </td>
+            <td>
+                <input type="text" id="note6">
+                <div class="slidecontainer">
+                    <input type="range" min="20" max="70" value="20" class="slider" id="myRange">
+                </div>
+            </td>
+            <td>
+                <input type="text" id="note7">
+                <div class="slidecontainer">
+                    <input type="range" min="20" max="70" value="20" class="slider" id="myRange">
+                </div>
+            </td>
+            <td>
+                <input type="text" id="note8">
+                <div class="slidecontainer">
+                    <input type="range" min="20" max="70" value="20" class="slider" id="myRange">
+                </div>
+            </td>
+            <td>
+                <input type="text" id="note9">
+                <div class="slidecontainer">
+                    <input type="range" min="20" max="70" value="20" class="slider" id="myRange">
+                </div>
+            </td>
+            <td>
+                <input type="text" id="note10">
+                <div class="slidecontainer">
+                    <input type="range" min="20" max="70" value="20" class="slider" id="myRange">
+                </div>
+            </td>
+            <td>
+                <input type="text" id="note11">
+                <div class="slidecontainer">
+                    <input type="range" min="20" max="70" value="20" class="slider" id="myRange">
+                </div>
+            </td>
+            <td>
+                <input type="text" id="note12">
+                <div class="slidecontainer">
+                    <input type="range" min="20" max="70" value="20" class="slider" id="myRange">
+                </div>
+            </td>
+            <td>
+                <input type="text" id="note13">
+                <div class="slidecontainer">
+                    <input type="range" min="20" max="70" value="20" class="slider" id="myRange">
+                </div>
+            </td>
+            <td>
+                <input type="text" id="note14">
+                <div class="slidecontainer">
+                    <input type="range" min="20" max="70" value="20" class="slider" id="myRange">
+                </div>
+            </td>
+            <td>
+                <input type="text" id="note15">
+                <div class="slidecontainer">
+                    <input type="range" min="20" max="70" value="20" class="slider" id="myRange">
+                </div>
+            </td>
+            <td>
+                <input type="text" id="note16">
+                <div class="slidecontainer">
+                    <input type="range" min="20" max="70" value="20" class="slider" id="myRange">
+                </div>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
